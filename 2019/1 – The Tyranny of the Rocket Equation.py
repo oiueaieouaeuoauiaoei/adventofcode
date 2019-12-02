@@ -3,9 +3,10 @@ def parse_input():
 		return int(line, base=10)
 	
 	from pathlib import Path
-	path = Path(__file__).with_suffix(".txt")
-	with open(path, mode="rt", encoding="utf8") as file:
-		return [parse_line(line) for line in file]
+	with open(Path(__file__).with_suffix(".txt")) as file:
+		# blindly strip the line feed at the end of inputs
+		data = file.read()[:-1]
+	return [parse_line(line) for line in data.split("\N{LINE FEED}")]
 modules_masses = parse_input()
 
 def mass_to_fuel(mass):
