@@ -31,3 +31,18 @@ with open(Path(__file__).with_suffix(".txt")) as file:
 	modules_masses = parse_input(file)
 	print(f"{part_one(modules_masses)=}")
 	print(f"{part_two(modules_masses)=}")
+
+from io import StringIO
+tests = [
+	(part_one, ["12"], 2),
+	(part_one, ["14"], 2),
+	(part_one, ["1969"], 654),
+	(part_one, ["100756"], 33583),
+	
+	(part_two, ["14"], 2),
+	(part_two, ["1969"], 966),
+	(part_two, ["100756"], 50346),
+]
+for index, test in enumerate(tests):
+	result = test[0](parse_input(test[1]))
+	assert result == test[2], f"test case {index} failed, want {test[2]}, got {result}"
