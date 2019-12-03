@@ -33,6 +33,25 @@ def part_two(memory):
 		if 19690720 == run_intcode(memory, noun, verb):
 			return 100*noun + verb
 
+# some assumptions are required, but they seem to hold true
+def part_two_bis(memory):
+	base = run_intcode(memory, noun=0, verb=0)
+	base_plus_noun = run_intcode(memory, noun=1, verb=0)
+	base_plus_verb = run_intcode(memory, noun=0, verb=1)
+	
+	noun = base_plus_noun - base
+	verb = base_plus_verb - base
+	assert 0 < verb < noun
+	
+	goal = 19690720
+	base_remain = goal - base
+	
+	noun_quotient, noun_remain = divmod(base_remain, noun)
+	verb_quotient, verb_remain = divmod(noun_remain, verb)
+	assert 0 == verb_remain
+	
+	return 100*noun_quotient + verb_quotient
+
 def parse_input(input_file):
 	import csv
 	parsed = list()
@@ -46,3 +65,4 @@ with open(Path(__file__).with_suffix(".txt")) as file:
 	memory = parse_input(file)
 	print(f"{part_one(memory)=}")
 	print(f"{part_two(memory)=}")
+	print(f"{part_two_bis(memory)=}")
