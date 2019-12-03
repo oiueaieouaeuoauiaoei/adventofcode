@@ -1,24 +1,13 @@
-def parse_input():
-	def parse_line(line):
-		return int(line, base=10)
-	
-	from pathlib import Path
-	with open(Path(__file__).with_suffix(".txt")) as file:
-		# blindly strip the line feed at the end of inputs
-		data = file.read()[:-1]
-	return [parse_line(line) for line in data.split("\N{LINE FEED}")]
-modules_masses = parse_input()
-
 def mass_to_fuel(mass):
 	return mass //3 -2
 
-def part_one():
+def part_one(modules_masses):
 	total = 0
 	for modules_mass in modules_masses:
 		total += mass_to_fuel(modules_mass)
 	return total
 
-def part_two():
+def part_two(modules_masses):
 	total = 0
 	for modules_mass in modules_masses:
 		sub_total = 0
@@ -29,5 +18,16 @@ def part_two():
 		total += sub_total
 	return total
 
-print(f"{part_one()=}")
-print(f"{part_two()=}")
+def parse_input(input_file):
+	import csv
+	parsed = list()
+	for row in csv.reader(input_file):
+		for cell in row:
+			parsed.append(int(cell, base=10))
+	return parsed
+
+from pathlib import Path
+with open(Path(__file__).with_suffix(".txt")) as file:
+	modules_masses = parse_input(file)
+	print(f"{part_one(modules_masses)=}")
+	print(f"{part_two(modules_masses)=}")

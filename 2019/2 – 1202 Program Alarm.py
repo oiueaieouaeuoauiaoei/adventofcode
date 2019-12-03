@@ -1,15 +1,4 @@
-def parse_input():
-	def parse_line(line):
-		return int(line, base=10)
-	
-	from pathlib import Path
-	with open(Path(__file__).with_suffix(".txt")) as file:
-		# blindly strip the line feed at the end of inputs
-		data = file.read()[:-1]
-	return [parse_line(line) for line in data.split("\N{COMMA}")]
-memory = parse_input()
-
-def run_intcode(input_memory, noun=None, verb=None):
+def run_intcode(input_memory, noun, verb):
 	done, memory, index = False, input_memory.copy(), 0
 	
 	memory[1] = noun
@@ -35,14 +24,25 @@ def run_intcode(input_memory, noun=None, verb=None):
 	
 	return memory[0]
 
-def part_one():
-	return run_intcode(memory, 12, 2)
+def part_one(memory):
+	return run_intcode(memory, noun=12, verb=2)
 
-def part_two():
+def part_two(memory):
 	from itertools import product
 	for noun, verb in product(range(100), range(100)):
 		if 19690720 == run_intcode(memory, noun, verb):
 			return 100*noun + verb
 
-print(f"{part_one()=}")
-print(f"{part_two()=}")
+def parse_input(input_file):
+	import csv
+	parsed = list()
+	for row in csv.reader(input_file):
+		for cell in row:
+			parsed.append(int(cell, base=10))
+	return parsed
+
+from pathlib import Path
+with open(Path(__file__).with_suffix(".txt")) as file:
+	memory = parse_input(file)
+	print(f"{part_one(memory)=}")
+	print(f"{part_two(memory)=}")
