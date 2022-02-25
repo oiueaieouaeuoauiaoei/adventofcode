@@ -17,47 +17,6 @@ def part_two(asteroids):
 		))
 	)
 	
-	almost_sorted_asteroids = sorted(
-		(
-			cmath.phase((asteroid - station) * complex(0, -1)),
-			abs(asteroid - station),
-			asteroid,
-		)
-		for asteroid in asteroids - {station}
-	)
-	
-	last_phase = None
-	index = None
-	transposed = list()
-	for (t, r, asteroid, ) in almost_sorted_asteroids:
-		if last_phase != t:
-			last_phase = t
-			index = 0
-		
-		if len(transposed) <= index:
-			transposed.append(list())
-		
-		transposed[index].append(asteroid)
-		index += 1
-	
-	sorted_asteroids = list(
-		asteroid
-		for asteroids in transposed
-		for asteroid in asteroids
-	)
-	
-	return int(sorted_asteroids[199].real*100 + sorted_asteroids[199].imag)
-
-# some assumptions are required, but they seem to hold true
-def part_two_bis(asteroids):
-	station = max(
-		asteroids,
-		key=lambda station: len(set(
-			cmath.phase(station - asteroid)
-			for asteroid in asteroids - {station}
-		))
-	)
-	
 	asteroid_cache = dict()
 	for asteroid in asteroids - {station}:
 		(r, t, ) = cmath.polar((asteroid - station) * complex(0, -1))
@@ -173,4 +132,3 @@ with open(Path(__file__).with_suffix(".txt")) as file:
 	parsed = parse_input(file)
 	print(f"{part_one(parsed)=}")
 	print(f"{part_two(parsed)=}")
-	print(f"{part_two_bis(parsed)=}")
